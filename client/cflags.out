@@ -1,0 +1,1 @@
+-lrt -lpthread -DSF_VISIBILITY -fvisibility=hidden -g -O0 -Wall

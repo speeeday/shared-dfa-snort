@@ -1,0 +1,16 @@
+#!/bin/bash
+
+#./m
+
+sudo ./src/snort -Q --daq afpacket --daq-var buffer_size_mb=10 -i docker0:vmnet1 -c /etc/snort/etc/snort.conf -l /var/log/snort1 &
+
+trap ctrl_c INT
+function ctrl_c() {
+    sudo killall -INT snort
+    sudo killall -9 ping
+    sleep 2
+}
+
+ping 172.17.0.2 &
+tail -f /var/log/snort1/alert
+
