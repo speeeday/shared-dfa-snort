@@ -380,6 +380,11 @@ DISTCLEANFILES = stamp-h.in cflags.out cppflags.out
 pkgconfigdir = $(libdir)/pkgconfig
 pkgconfig_DATA = snort.pc
 all: config.h
+	mkdir -p src/dynamic-preprocessors/include;
+	mkdir -p src/dynamic-preprocessors/include/sfutil;
+	cp src/sj_malloc.h src/dynamic-preprocessors/include/sj_malloc.h;
+	cp src/util.h src/dynamic-preprocessors/include/util.h;
+	cp src/sfutil/sf_ipvar.h src/dynamic-preprocessors/include/sfutil/sf_ipvar.h;
 	$(MAKE) $(AM_MAKEFLAGS) all-recursive
 
 .SUFFIXES:
