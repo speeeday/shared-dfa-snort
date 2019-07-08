@@ -14,6 +14,7 @@
 
 
 
+
 am__is_gnu_make = { \
   if test -z '$(MAKELEVEL)'; then \
     false; \
@@ -236,18 +237,18 @@ distuninstallcheck_listfiles = find . -type f -print
 am__distuninstallcheck_listfiles = $(distuninstallcheck_listfiles) \
   | sed 's|^\./|$(prefix)/|' | grep -v '$(infodir)/dir$$'
 distcleancheck_listfiles = find . -type f -print
-ACLOCAL = ${SHELL} /home/sj/Workspace/mmap-snort/missing aclocal-1.15
+ACLOCAL = ${SHELL} /home/sj/research-projects/scalable-dataplane/shared-dfa-snort/server/missing aclocal-1.15
 AMTAR = $${TAR-tar}
 AM_DEFAULT_VERBOSITY = 1
 AR = ar
-AUTOCONF = ${SHELL} /home/sj/Workspace/mmap-snort/missing autoconf
-AUTOHEADER = ${SHELL} /home/sj/Workspace/mmap-snort/missing autoheader
-AUTOMAKE = ${SHELL} /home/sj/Workspace/mmap-snort/missing automake-1.15
+AUTOCONF = ${SHELL} /home/sj/research-projects/scalable-dataplane/shared-dfa-snort/server/missing autoconf
+AUTOHEADER = ${SHELL} /home/sj/research-projects/scalable-dataplane/shared-dfa-snort/server/missing autoheader
+AUTOMAKE = ${SHELL} /home/sj/research-projects/scalable-dataplane/shared-dfa-snort/server/missing automake-1.15
 AWK = gawk
 CC = gcc
 CCDEPMODE = depmode=gcc3
 CCONFIGFLAGS = 
-CFLAGS = -g -O0 -DSF_VISIBILITY -fvisibility=hidden -Wall
+CFLAGS = -lrt -lpthread -DSF_VISIBILITY -fvisibility=hidden -g -O0 -Wall
 CONFIGFLAGS =  -DSF_WCHAR -DTARGET_BASED -DPERF_PROFILING -DSNORT_RELOAD -DNO_NON_ETHER_DECODER -DNORMALIZER -DACTIVE_RESPONSE -DFEAT_OPEN_APPID -DHAVE_LIBLUAJIT
 CPP = gcc -E
 CPPFLAGS = -DGRE -DMPLS -DPPM_MGR -DDEBUG -DENABLE_REACT -DENABLE_RESPOND -DENABLE_RESPONSE3 -DSF_WCHAR -DTARGET_BASED -DPERF_PROFILING -DSNORT_RELOAD -DNO_NON_ETHER_DECODER -DNORMALIZER -DACTIVE_RESPONSE -DFEAT_OPEN_APPID -DHAVE_LIBLUAJIT
@@ -275,7 +276,7 @@ LD = /usr/bin/ld -m elf_x86_64
 LDFLAGS =  -lpcre -ldumbnet
 LEX = flex
 LIBOBJS = 
-LIBS = -lnghttp2 -lz -ldaq_static -ldumbnet -lpcre -lpcap -lnsl -lm -lm  -lcrypto -ldl -L/usr/local/lib -ldaq_static_modules  -lsfbpf -lpcap -lsfbpf -lpcap -lz -lpthread -lpthread -lpthread -lrt
+LIBS = -lnghttp2 -lz -ldaq_static -ldumbnet -lpcre -lpcap -lnsl -lm -lm  -lcrypto -ldl -L/usr/local/lib -ldaq_static_modules  -lsfbpf -lpcap -lsfbpf -lpcap -lz -lpthread -lpthread -lpthread
 LIBTOOL = $(SHELL) $(top_builddir)/libtool
 LIPO = 
 LN_S = ln -s
@@ -283,7 +284,7 @@ LTLIBOBJS =
 LT_SYS_LIBRARY_PATH = 
 LUA_CFLAGS = -I/usr/include/luajit-2.1
 LUA_LIBS = -lluajit-5.1
-MAKEINFO = ${SHELL} /home/sj/Workspace/mmap-snort/missing makeinfo
+MAKEINFO = ${SHELL} /home/sj/research-projects/scalable-dataplane/shared-dfa-snort/server/missing makeinfo
 MANIFEST_TOOL = :
 MKDIR_P = /bin/mkdir -p
 NM = /usr/bin/nm -B
@@ -315,10 +316,10 @@ STRIP = strip
 VERSION = 2.9.12
 XCCFLAGS = 
 YACC = bison -y
-abs_builddir = /home/sj/Workspace/mmap-snort
-abs_srcdir = /home/sj/Workspace/mmap-snort
-abs_top_builddir = /home/sj/Workspace/mmap-snort
-abs_top_srcdir = /home/sj/Workspace/mmap-snort
+abs_builddir = /home/sj/research-projects/scalable-dataplane/shared-dfa-snort/server
+abs_srcdir = /home/sj/research-projects/scalable-dataplane/shared-dfa-snort/server
+abs_top_builddir = /home/sj/research-projects/scalable-dataplane/shared-dfa-snort/server
+abs_top_srcdir = /home/sj/research-projects/scalable-dataplane/shared-dfa-snort/server
 ac_ct_AR = ar
 ac_ct_CC = gcc
 ac_ct_DUMPBIN = 
@@ -348,7 +349,7 @@ host_vendor = pc
 htmldir = ${docdir}
 includedir = ${prefix}/include
 infodir = ${datarootdir}/info
-install_sh = ${SHELL} /home/sj/Workspace/mmap-snort/install-sh
+install_sh = ${SHELL} /home/sj/research-projects/scalable-dataplane/shared-dfa-snort/server/install-sh
 libdir = ${exec_prefix}/lib
 libexecdir = ${exec_prefix}/libexec
 localedir = ${datarootdir}/locale
@@ -362,7 +363,7 @@ pdfdir = ${docdir}
 prefix = /usr/local
 program_transform_name = s,x,x,
 psdir = ${docdir}
-runstatedir = @runstatedir@
+runstatedir = ${localstatedir}/run
 sbindir = ${exec_prefix}/sbin
 sharedstatedir = ${prefix}/com
 srcdir = .

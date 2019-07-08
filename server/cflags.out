@@ -1,1 +1,1 @@
--g -O0 -DSF_VISIBILITY -fvisibility=hidden -Wall
+-lrt -lpthread -DSF_VISIBILITY -fvisibility=hidden -g -O0 -Wall

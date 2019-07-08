@@ -215,18 +215,18 @@ ETAGS = etags
 CTAGS = ctags
 am__DIST_COMMON = $(srcdir)/Makefile.in $(top_srcdir)/depcomp
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
-ACLOCAL = ${SHELL} /home/sj/Workspace/mmap-snort/missing aclocal-1.15
+ACLOCAL = ${SHELL} /home/sj/research-projects/scalable-dataplane/shared-dfa-snort/server/missing aclocal-1.15
 AMTAR = $${TAR-tar}
 AM_DEFAULT_VERBOSITY = 1
 AR = ar
-AUTOCONF = ${SHELL} /home/sj/Workspace/mmap-snort/missing autoconf
-AUTOHEADER = ${SHELL} /home/sj/Workspace/mmap-snort/missing autoheader
-AUTOMAKE = ${SHELL} /home/sj/Workspace/mmap-snort/missing automake-1.15
+AUTOCONF = ${SHELL} /home/sj/research-projects/scalable-dataplane/shared-dfa-snort/server/missing autoconf
+AUTOHEADER = ${SHELL} /home/sj/research-projects/scalable-dataplane/shared-dfa-snort/server/missing autoheader
+AUTOMAKE = ${SHELL} /home/sj/research-projects/scalable-dataplane/shared-dfa-snort/server/missing automake-1.15
 AWK = gawk
 CC = gcc
 CCDEPMODE = depmode=gcc3
 CCONFIGFLAGS = 
-CFLAGS = -g -O0 -DSF_VISIBILITY -fvisibility=hidden -Wall
+CFLAGS = -lrt -lpthread -DSF_VISIBILITY -fvisibility=hidden -g -O0 -Wall
 CONFIGFLAGS =  -DSF_WCHAR -DTARGET_BASED -DPERF_PROFILING -DSNORT_RELOAD -DNO_NON_ETHER_DECODER -DNORMALIZER -DACTIVE_RESPONSE -DFEAT_OPEN_APPID -DHAVE_LIBLUAJIT
 CPP = gcc -E
 CPPFLAGS = -DGRE -DMPLS -DPPM_MGR -DDEBUG -DENABLE_REACT -DENABLE_RESPOND -DENABLE_RESPONSE3 -DSF_WCHAR -DTARGET_BASED -DPERF_PROFILING -DSNORT_RELOAD -DNO_NON_ETHER_DECODER -DNORMALIZER -DACTIVE_RESPONSE -DFEAT_OPEN_APPID -DHAVE_LIBLUAJIT
@@ -262,7 +262,7 @@ LTLIBOBJS =
 LT_SYS_LIBRARY_PATH = 
 LUA_CFLAGS = -I/usr/include/luajit-2.1
 LUA_LIBS = -lluajit-5.1
-MAKEINFO = ${SHELL} /home/sj/Workspace/mmap-snort/missing makeinfo
+MAKEINFO = ${SHELL} /home/sj/research-projects/scalable-dataplane/shared-dfa-snort/server/missing makeinfo
 MANIFEST_TOOL = :
 MKDIR_P = /bin/mkdir -p
 NM = /usr/bin/nm -B
@@ -294,10 +294,10 @@ STRIP = strip
 VERSION = 2.9.12
 XCCFLAGS = 
 YACC = bison -y
-abs_builddir = /home/sj/Workspace/mmap-snort/tools/control
-abs_srcdir = /home/sj/Workspace/mmap-snort/tools/control
-abs_top_builddir = /home/sj/Workspace/mmap-snort
-abs_top_srcdir = /home/sj/Workspace/mmap-snort
+abs_builddir = /home/sj/research-projects/scalable-dataplane/shared-dfa-snort/server/tools/control
+abs_srcdir = /home/sj/research-projects/scalable-dataplane/shared-dfa-snort/server/tools/control
+abs_top_builddir = /home/sj/research-projects/scalable-dataplane/shared-dfa-snort/server
+abs_top_srcdir = /home/sj/research-projects/scalable-dataplane/shared-dfa-snort/server
 ac_ct_AR = ar
 ac_ct_CC = gcc
 ac_ct_DUMPBIN = 
@@ -327,7 +327,7 @@ host_vendor = pc
 htmldir = ${docdir}
 includedir = ${prefix}/include
 infodir = ${datarootdir}/info
-install_sh = ${SHELL} /home/sj/Workspace/mmap-snort/install-sh
+install_sh = ${SHELL} /home/sj/research-projects/scalable-dataplane/shared-dfa-snort/server/install-sh
 libdir = ${exec_prefix}/lib
 libexecdir = ${exec_prefix}/libexec
 localedir = ${datarootdir}/locale
@@ -351,9 +351,9 @@ top_builddir = ../..
 top_srcdir = ../..
 AUTOMAKE_OPTIONS = foreign
 snort_control_SOURCES = sfcontrol.c
-snort_control_CFLAGS = -g -O0 -DSF_VISIBILITY -fvisibility=hidden -Wall $(AM_CFLAGS)
+snort_control_CFLAGS = -lrt -lpthread -DSF_VISIBILITY -fvisibility=hidden -g -O0 -Wall $(AM_CFLAGS)
 snort_dump_packets_control_SOURCES = snort_dump_packets.c
-snort_dump_packets_control_CFLAGS = -g -O0 -DSF_VISIBILITY -fvisibility=hidden -Wall $(AM_CFLAGS)
+snort_dump_packets_control_CFLAGS = -lrt -lpthread -DSF_VISIBILITY -fvisibility=hidden -g -O0 -Wall $(AM_CFLAGS)
 dist_doc_DATA = README.snort_control README.snort_dump_packets_control
 all: all-am
 
