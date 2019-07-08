@@ -125,10 +125,10 @@ PreprocStats ruleOTNEvalPerfStats;
 /* initialize the global OTNX_MATCH_DATA variable */
 OTNX_MATCH_DATA * OtnXMatchDataNew(int num_rule_types)
 {
-    OTNX_MATCH_DATA *omd = (OTNX_MATCH_DATA *)sj_malloc(sizeof(OTNX_MATCH_DATA));
+    OTNX_MATCH_DATA *omd = (OTNX_MATCH_DATA *)sj_calloc(1,sizeof(OTNX_MATCH_DATA));
 
     omd->iMatchInfoArraySize = num_rule_types;
-    omd->matchInfo = (MATCH_INFO *)sj_malloc(num_rule_types * sizeof(MATCH_INFO));
+    omd->matchInfo = (MATCH_INFO *)sj_calloc(num_rule_types, sizeof(MATCH_INFO));
 
     return omd;
 }

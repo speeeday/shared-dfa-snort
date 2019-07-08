@@ -95,7 +95,6 @@ struct mallinfo {
 int sj_malloc_init();
 int sj_malloc_fini();
 void *sj_malloc_attach();
-
   
 /*
   malloc(size_t n)

@@ -69,7 +69,7 @@ void detection_filter_cleanup(void)
     if (detection_filter_hash == NULL)
         return;
 
-    sj_sfxhash_delete(detection_filter_hash);
+    sfxhash_delete(detection_filter_hash);
     detection_filter_hash = NULL;
 }
 

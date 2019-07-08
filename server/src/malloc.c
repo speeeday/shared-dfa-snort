@@ -658,7 +658,7 @@ MAX_RELEASE_CHECK_RATE   default: 4095 unless not HAVE_MMAP
 #endif /* NO_SEGMENT_TRAVERSAL */
 
 #define STORAGE_ID "/SHM_TEST66"
-#define HEAP_SIZE (900 * (1 << 20))
+#define HEAP_SIZE (700 * (1 << 20))
 
 /*
   mallopt tuning options.  SVID/XPG defines four standard parameter
@@ -770,6 +770,7 @@ extern "C" {
 #define dlindependent_calloc   sj_independent_calloc
 #define dlindependent_comalloc sj_independent_comalloc
 #endif /* USE_DL_PREFIX */
+
 
 #define MINIMUM_MORECORE_SIZE  (64 * 1024U)
 
@@ -3521,9 +3522,13 @@ static void internal_malloc_stats(mstate m) {
       }
     }
 
-    fprintf(stderr, "max system bytes = %10lu\n", (unsigned long)(maxfp));
-    fprintf(stderr, "system bytes     = %10lu\n", (unsigned long)(fp));
-    fprintf(stderr, "in use bytes     = %10lu\n", (unsigned long)(used));
+    double dmfp = ((unsigned long)maxfp)/1048576.00;
+    double dfp = ((unsigned long)fp)/1048576.00;
+    double dused = ((unsigned long)used)/1048576.00;
+
+    fprintf(stderr, "max system bytes = %.2lf (%10lu)\n", dmfp, (unsigned long)(maxfp));
+    fprintf(stderr, "system bytes     = %.2lf (%10lu)\n", dfp, (unsigned long)(fp));
+    fprintf(stderr, "in use bytes     = %.2lf (%10lu)\n", dused, (unsigned long)(used));
 
     POSTACTION(m);
   }
@@ -4835,8 +4840,9 @@ void* dlmalloc(size_t bytes) {
 
   postaction:
     POSTACTION(gm);
-    if (mem != 0)
+    if (mem != 0) {
     	memset(mem, 0, bytes);
+    }
     return mem;
   }
 
@@ -4949,7 +4955,7 @@ void dlfree(void* mem) {
     erroraction:
       USAGE_ERROR_ACTION(fm, p);
     postaction:
-      POSTACTION(fm);
+	  POSTACTION(fm);
     }
   }
 #if !FOOTERS

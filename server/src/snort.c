@@ -766,6 +766,8 @@ int SnortMain(int argc, char *argv[])
 
     LogMessage("Setup Done.\n");
 
+    sj_malloc_stats();
+
 // change this to condtional variable to wake this thread up to return
     while(true) {
     	if (SignalCheck()) {
@@ -4224,7 +4226,7 @@ void SnortConfFree(SnortConfig *sc)
         for (j = 0; j < NUM_IP_PROTOS; j++)
             sflist_free_all(sc->ip_proto_only_lists[j], NULL);
 
-        sj_free(sc->ip_proto_only_lists);
+        free(sc->ip_proto_only_lists);
     }
 
     sfPolicyFini(sc->policy_config);

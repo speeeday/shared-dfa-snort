@@ -106,7 +106,7 @@ void SnortEventqPop(void)
 EventQueueConfig * EventQueueConfigNew(void)
 {
     EventQueueConfig *eq =
-        (EventQueueConfig *)sj_malloc(sizeof(EventQueueConfig));
+        (EventQueueConfig *)calloc(sizeof(EventQueueConfig),1);
 
     eq->max_events = 8;
     eq->log_events = 3;
@@ -122,7 +122,7 @@ void EventQueueConfigFree(EventQueueConfig *eq)
     if (eq == NULL)
         return;
 
-    sj_free(eq);
+    free(eq);
 }
 
 int SnortEventqAdd(

@@ -40,7 +40,7 @@
 
 vartable_t * sfvt_alloc_table(void)
 {
-    vartable_t *table = (vartable_t *)sj_malloc(sizeof(vartable_t));
+    vartable_t *table = (vartable_t *)calloc(sizeof(vartable_t),1);
 
     /* ID for recognition of variables with different name, but same content
      * Start at 1, so a value of zero indicates not set.
@@ -72,13 +72,13 @@ static char * sfvt_expand_value(vartable_t *table, char *value)
     if (ptr == end)
         return NULL;
 
-    tmp = sj_SnortStrndup(ptr, end-ptr);
+    tmp = SnortStrndup(ptr, end-ptr);
     if (tmp == NULL)
         return NULL;
 
     /* Start by allocating the length of the value */
     retsize = strlen(value) + 1;
-    ret = (char *)sj_malloc(retsize);
+    ret = (char *)calloc(retsize,1);
 
     ptr = tmp;
     end = tmp + strlen(tmp);
@@ -121,12 +121,12 @@ static char * sfvt_expand_value(vartable_t *table, char *value)
             if (varstart == ptr)
                 goto sfvt_expand_value_error;
 
-            vartmp = sj_SnortStrndup(varstart, ptr - varstart);
+            vartmp = SnortStrndup(varstart, ptr - varstart);
             if (vartmp == NULL)
                 goto sfvt_expand_value_error;
 
             ipvar = sfvt_lookup_var(table, vartmp);
-            sj_free(vartmp);
+            free(vartmp);
             if (ipvar == NULL)
                 goto sfvt_expand_value_error;
 
@@ -137,10 +137,10 @@ static char * sfvt_expand_value(vartable_t *table, char *value)
                     char *tmpalloc;
 
                     retsize = retlen + strlen(ipvar->value) + (end - ptr) + 1;
-                    tmpalloc = (char *)sj_malloc(retsize);
+                    tmpalloc = (char *)calloc(1,retsize);
                     memcpy(tmpalloc, ret, retlen);
                     memcpy(tmpalloc + retlen, ipvar->value, strlen(ipvar->value));
-                    sj_free(ret);
+                    free(ret);
                     retlen += strlen(ipvar->value);
                     ret = tmpalloc;
                 }
@@ -161,13 +161,13 @@ static char * sfvt_expand_value(vartable_t *table, char *value)
         ptr++;
     }
 
-    sj_free(tmp);
+    free(tmp);
 
     if ((retlen + 1) < retsize)
     {
-        char *tmpalloc = (char *)sj_malloc(retlen + 1);
+        char *tmpalloc = (char *)calloc(1,retlen + 1);
         memcpy(tmpalloc, ret, retlen);
-        sj_free(ret);
+        free(ret);
         ret = tmpalloc;
     }
 
@@ -175,8 +175,8 @@ static char * sfvt_expand_value(vartable_t *table, char *value)
     return ret;
 
 sfvt_expand_value_error:
-    sj_free(ret);
-    sj_free(tmp);
+    free(ret);
+    free(tmp);
     return NULL;
 }
 
@@ -193,7 +193,7 @@ SFIP_RET sfvt_define(vartable_t *table, char *name, char *value)
 
     len = strlen(name) + strlen(value) + 2;
 
-    if((buf = (char*)sj_malloc(len)) == NULL)
+    if((buf = (char*)calloc(1,len)) == NULL)
     {
         return SFIP_FAILURE;
     }
@@ -203,7 +203,7 @@ SFIP_RET sfvt_define(vartable_t *table, char *name, char *value)
     ret = sfvt_add_str(table, buf, &ipret);
     if ((ret == SFIP_SUCCESS) || (ret == SFIP_DUPLICATE))
         ipret->value = sfvt_expand_value(table, value);
-    sj_free(buf);
+    free(buf);
     return ret;
 }
 
@@ -346,7 +346,7 @@ void sfvt_free_table(vartable_t *table)
         sfvar_free(p);
         p = tmp;
     }
-    sj_free(table);
+    free(table);
 }
 
 /* Prints a table's contents */

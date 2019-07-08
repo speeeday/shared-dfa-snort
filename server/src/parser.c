@@ -894,7 +894,7 @@ SnortConfig * ParseSnortConf(void)
     sc->threshold_config = ThresholdConfigNew();
     sc->rate_filter_config = RateFilter_ConfigNew();
     sc->detection_filter_config = DetectionFilterConfigNew();
-    sc->ip_proto_only_lists = (SF_LIST **)sj_malloc(NUM_IP_PROTOS * sizeof(SF_LIST *));
+    sc->ip_proto_only_lists = (SF_LIST **)calloc(NUM_IP_PROTOS, sizeof(SF_LIST *));
 
     /* We're not going to parse rules on the first pass */
     parse_rules = 0;
@@ -906,9 +906,9 @@ SnortConfig * ParseSnortConf(void)
     }
 
     /* Add the default policy */
-    policy_id = sj_sfPolicyAdd(sc->policy_config, file_name);
+    policy_id = sfPolicyAdd(sc->policy_config, file_name);
     sfSetDefaultPolicy(sc->policy_config, policy_id);
-    sj_sfDynArrayCheckBounds((void **)&sc->targeted_policies, policy_id, &sc->num_policies_allocated);
+    sfDynArrayCheckBounds((void **)&sc->targeted_policies, policy_id, &sc->num_policies_allocated);
     sc->targeted_policies[policy_id] = SnortPolicyNew();
     InitVarTables(sc->targeted_policies[policy_id]);
     InitPolicyMode(sc->targeted_policies[policy_id]);
@@ -5681,8 +5681,8 @@ static void InitVarTables(SnortPolicy *p)
     p->portVarTable = PortVarTableCreate();
 
     if (p->nonamePortVarTable != NULL)
-        sj_PortTableFree(p->nonamePortVarTable);
-    p->nonamePortVarTable = sj_PortTableNew();
+        PortTableFree(p->nonamePortVarTable);
+    p->nonamePortVarTable = PortTableNew();
 
     if ((p->portVarTable == NULL) || (p->nonamePortVarTable == NULL))
     {
@@ -12158,7 +12158,7 @@ void configOptsPrint()
 
 SnortPolicy * SnortPolicyNew(void)
 {
-    SnortPolicy *pPolicy = (SnortPolicy *)sj_malloc(sizeof(SnortPolicy));
+    SnortPolicy *pPolicy = (SnortPolicy *)calloc(sizeof(SnortPolicy),1);
 
     if (pPolicy)
     {
@@ -12196,14 +12196,14 @@ void SnortPolicyFree(SnortPolicy *pPolicy)
         return;
 
     if (pPolicy->policy_version != NULL)
-        sj_free(pPolicy->policy_version);
+        free(pPolicy->policy_version);
 
 #ifdef TARGET_BASED
     if (pPolicy->target_based_config.args != NULL)
     {
-        sj_free(pPolicy->target_based_config.args);
+        free(pPolicy->target_based_config.args);
         if (pPolicy->target_based_config.file_name != NULL)
-            sj_free(pPolicy->target_based_config.file_name);
+            free(pPolicy->target_based_config.file_name);
     }
 #endif
 }

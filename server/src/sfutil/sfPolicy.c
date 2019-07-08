@@ -57,7 +57,7 @@ static void netBindFree(
 tSfPolicyConfig * sfPolicyInit(void)
 {
     int i;
-    tSfPolicyConfig *new = (tSfPolicyConfig *)sj_calloc(1, sizeof(tSfPolicyConfig));
+    tSfPolicyConfig *new = (tSfPolicyConfig *)calloc(1, sizeof(tSfPolicyConfig));
 
     if (new == NULL)
         return NULL;
@@ -106,10 +106,10 @@ void sfPolicyFini(tSfPolicyConfig *config)
     if (config->ppPolicies != NULL)
     {
         sfPolicyDelete(config, config->defaultPolicyId);
-        sj_free(config->ppPolicies);
+        free(config->ppPolicies);
     }
 
-    sj_free(config);
+    free(config);
 }
 
 
@@ -121,7 +121,7 @@ static void netBindFree(
     if (policyId && config)
     {
         sfPolicyDelete((tSfPolicyConfig *)config, *((tSfPolicyId *)policyId));
-        sj_free(policyId);
+        free(policyId);
     }
 }
 
@@ -155,7 +155,7 @@ int sfPolicyAdd(tSfPolicyConfig *config, char *fileName)
     if (emptyIndex == -1)
     {
         //no empty slot available. Allocate more space for policies
-        ppTmp = (tSfPolicy **)sj_calloc(config->numAllocatedPolicies + POLICY_ALLOCATION_CHUNK,
+        ppTmp = (tSfPolicy **)calloc(config->numAllocatedPolicies + POLICY_ALLOCATION_CHUNK,
                                      sizeof(tSfPolicy *));
         if (!ppTmp)
             return SF_POLICY_UNBOUND;
@@ -164,7 +164,7 @@ int sfPolicyAdd(tSfPolicyConfig *config, char *fileName)
         {
             memcpy(ppTmp, config->ppPolicies,
                    sizeof(tSfPolicyConfig *) * config->numAllocatedPolicies);
-            sj_free(config->ppPolicies);
+            free(config->ppPolicies);
         }
 
         config->ppPolicies = ppTmp;
@@ -173,80 +173,15 @@ int sfPolicyAdd(tSfPolicyConfig *config, char *fileName)
     }
 
     //allocate and initialize
-    pObject = (tSfPolicy *)sj_calloc(1, sizeof(tSfPolicy));
+    pObject = (tSfPolicy *)calloc(1, sizeof(tSfPolicy));
     if (!pObject)
         return SF_POLICY_UNBOUND;
 
     pObject->refCount++;
-    pObject->filename = sj_SnortStrdup(fileName);
+    pObject->filename = SnortStrdup(fileName);
     if (!pObject->filename)
     {
-        sj_free(pObject);
-        return SF_POLICY_UNBOUND;
-    }
-
-    config->ppPolicies[emptyIndex] = pObject;
-    config->numActivePolicies++;
-
-    //successfully added.
-    return emptyIndex;
-}
-
-int sj_sfPolicyAdd(tSfPolicyConfig *config, char *fileName)
-{
-    tSfPolicy *pObject = NULL;
-    int emptyIndex = -1;
-    tSfPolicyId i;
-    tSfPolicy **ppTmp;
-
-    if (config == NULL)
-        return SF_POLICY_UNBOUND;
-
-    for (i = 0; i < config->numAllocatedPolicies; i++)
-    {
-        if (config->ppPolicies[i])
-        {
-            if (!strcmp(config->ppPolicies[i]->filename, fileName))
-            {
-                config->ppPolicies[i]->refCount++;
-                return i;
-            }
-        }
-        else if (emptyIndex == -1)
-        {
-            emptyIndex = i;
-        }
-    }
-
-    if (emptyIndex == -1)
-    {
-        //no empty slot available. Allocate more space for policies
-        ppTmp = (tSfPolicy **)sj_malloc((config->numAllocatedPolicies + POLICY_ALLOCATION_CHUNK)*sizeof(tSfPolicy *));
-        if (!ppTmp)
-            return SF_POLICY_UNBOUND;
-
-        if (config->numAllocatedPolicies)
-        {
-            memcpy(ppTmp, config->ppPolicies,
-                   sizeof(tSfPolicyConfig *) * config->numAllocatedPolicies);
-            sj_free(config->ppPolicies);
-        }
-
-        config->ppPolicies = ppTmp;
-        emptyIndex = config->numAllocatedPolicies;
-        config->numAllocatedPolicies += POLICY_ALLOCATION_CHUNK;
-    }
-
-    //allocate and initialize
-    pObject = (tSfPolicy *)sj_malloc(sizeof(tSfPolicy));
-    if (!pObject)
-        return SF_POLICY_UNBOUND;
-
-    pObject->refCount++;
-    pObject->filename = sj_SnortStrdup(fileName);
-    if (!pObject->filename)
-    {
-        sj_free(pObject);
+        free(pObject);
         return SF_POLICY_UNBOUND;
     }
 
@@ -275,8 +210,8 @@ void sfPolicyDelete(tSfPolicyConfig *config, tSfPolicyId policyId)
         if (pObject->refCount == 0)
         {
             if (pObject->filename)
-                sj_free(pObject->filename);
-            sj_free(pObject);
+                free(pObject->filename);
+            free(pObject);
             config->ppPolicies[policyId] = NULL;
             config->numActivePolicies--;
             DEBUG_WRAP(DebugMessage(DEBUG_CONFIGRULES,
@@ -285,33 +220,6 @@ void sfPolicyDelete(tSfPolicyConfig *config, tSfPolicyId policyId)
     }
 }
 
-void sj_sfPolicyDelete(tSfPolicyConfig *config, tSfPolicyId policyId)
-{
-    tSfPolicy *pObject = NULL;
-
-    if ((config == NULL) || (config->ppPolicies == NULL) ||
-        (policyId >= config->numAllocatedPolicies))
-    {
-        return;
-    }
-
-    pObject = config->ppPolicies[policyId];
-
-    if (pObject)
-    {
-        pObject->refCount--;
-        if (pObject->refCount == 0)
-        {
-            if (pObject->filename)
-                sj_free(pObject->filename);
-            sj_free(pObject);
-            config->ppPolicies[policyId] = NULL;
-            config->numActivePolicies--;
-            DEBUG_WRAP(DebugMessage(DEBUG_CONFIGRULES,
-                                    "sfPolicyDelete: freed policyConfig policyId %d\n", policyId););
-        }
-    }
-}
 
 char * sfPolicyGet(tSfPolicyConfig *config, tSfPolicyId policyId)
 {
@@ -510,7 +418,7 @@ int sfNetworkAddBinding(
     if ((config == NULL) || (Ip == NULL) || (fileName == NULL))
         return -1;
 
-    if ((policyId = sj_calloc(sizeof(tSfPolicyId), 1)) == NULL)
+    if ((policyId = calloc(sizeof(tSfPolicyId), 1)) == NULL)
     {
         return -1;
     }
@@ -519,7 +427,7 @@ int sfNetworkAddBinding(
     *policyId = sfPolicyAdd(config, fileName);
     if ( NotBound(*policyId) )
     {
-        sj_free(policyId);
+        free(policyId);
         return -1;
     }
 
@@ -529,7 +437,7 @@ int sfNetworkAddBinding(
     //DEBUG_WRAP(DebugMessage(DEBUG_CONFIGRULES,"Added  vlandId  %d, file %s, policyId: %d\n", vlanId, fileName, policyId););
     if (iRet)
     {
-        sj_free(policyId);
+        free(policyId);
         return -1;
     }
 
@@ -594,7 +502,7 @@ int sfDynArrayCheckBounds (
     if (index >= *maxElements)
     {
         //expand the array
-        ppTmp = sj_calloc(index+POLICY_ALLOCATION_CHUNK, sizeof(void *));
+        ppTmp = calloc(index+POLICY_ALLOCATION_CHUNK, sizeof(void *));
         if (!(ppTmp))
         {
             return -1;
@@ -603,7 +511,7 @@ int sfDynArrayCheckBounds (
         if (*maxElements)
         {
             memcpy(ppTmp, *dynArray, sizeof(void*)*(*maxElements));
-            sj_free(*dynArray);
+            free(*dynArray);
         }
 
         *dynArray = ppTmp;
@@ -612,32 +520,4 @@ int sfDynArrayCheckBounds (
 
     return 0;
 }
-int sj_sfDynArrayCheckBounds (
-        void ** dynArray,
-        unsigned int index,
-        unsigned int *maxElements
-        )
-{
-    void *ppTmp = NULL;
 
-    if (index >= *maxElements)
-    {
-        //expand the array
-        ppTmp = sj_malloc((index+POLICY_ALLOCATION_CHUNK) * sizeof(void *));
-        if (!(ppTmp))
-        {
-            return -1;
-        }
-
-        if (*maxElements)
-        {
-            memcpy(ppTmp, *dynArray, sizeof(void*)*(*maxElements));
-            sj_free(*dynArray);
-        }
-
-        *dynArray = ppTmp;
-        *maxElements = index + POLICY_ALLOCATION_CHUNK;
-    }
-
-    return 0;
-}
