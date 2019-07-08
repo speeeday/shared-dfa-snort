@@ -1,0 +1,10 @@
+#!/bin/bash
+
+sudo ./src/snort -Q --daq afpacket --daq-var buffer_size_mb=10 -i docker0:br-eda9e84b0d9c -c /etc/snort/etc/snort.conf -l /var/log/snort &
+
+trap ctrl_c INT
+function ctrl_c() {
+        sudo killall -9 snort
+}
+
+tail -f /var/log/snort/alert
