@@ -874,7 +874,7 @@ void *sj_malloc_attach() {
     return NULL;
   }
   void *pref_addr = (void *)(*((void **)addr));
-  if (addr != pref_addr) {
+  while (addr != pref_addr) {
     int res = munmap(addr, HEAP_SIZE);
     if (res == -1) {
       perror("munmap");
@@ -892,7 +892,7 @@ void *sj_malloc_attach() {
     
     if (addr != pref_addr) {
       fprintf(stdout, "was not able to get preferred addr of %p, only got %p\n", pref_addr, addr);
-      exit(-1);
+      //exit(-1);
     }
   }
   fprintf(stdout, "Mapped Shared Memory Address: %p\n", addr);
