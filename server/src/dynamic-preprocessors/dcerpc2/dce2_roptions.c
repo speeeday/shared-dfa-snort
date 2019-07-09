@@ -42,7 +42,6 @@
 #include "sf_snort_plugin_api.h"
 #include "sfhashfcn.h"
 #include "profiler.h"
-#include "sj_malloc.h"
 
 /********************************************************************
  * Macros
@@ -672,7 +671,7 @@ static void DCE2_ParseIface(char *token, DCE2_IfaceData *iface_data)
 
 static inline void * DCE2_AllocFp(uint32_t size)
 {
-    void *mem = sj_calloc(1, (size_t)size);
+    void *mem = calloc(1, (size_t)size);
     if (mem == NULL)
     {
         DCE2_Die("%s(%d) Out of memory!", __FILE__, __LINE__);
